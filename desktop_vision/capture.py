@@ -8,17 +8,52 @@ import time
 from typing import Optional, Tuple, Union
 from PIL import Image, ImageGrab
 
-from .desktop import attach_desktop, set_dpi_awareness
+from .desktop import attach_desktop, get_monitors, get_screen_size, get_virtual_screen_bounds, set_dpi_awareness
 from .window import WindowInfo, bring_to_front, find_window
 
 
-def capture_screen(region: Optional[Tuple[int, int, int, int]] = None) -> Image.Image:
+def capture_screen(
+    region: Optional[Tuple[int, int, int, int]] = None,
+    all_monitors: bool = False,
+    monitor_index: Optional[int] = None,
+) -> Image.Image:
     """
-    Captures a full screenshot or a specified bounding box (left, top, right, bottom).
+    Captures a full screenshot, a specific monitor, or a specified bounding box.
+    Gracefully handles multi-monitor coordinates and DPI boundaries.
     """
     attach_desktop()
     set_dpi_awareness()
-    return ImageGrab.grab(bbox=region)
+
+    if monitor_index is not None:
+        monitors = get_monitors()
+        if 0 <= monitor_index < len(monitors):
+            full = ImageGrab.grab(all_screens=True)
+            vx, vy, _, _ = get_virtual_screen_bounds()
+            m = monitors[monitor_index]
+            crop_box = (m.left - vx, m.top - vy, m.right - vx, m.bottom - vy)
+            return full.crop(crop_box)
+        raise IndexError(f"Monitor index {monitor_index} out of range (0-{len(monitors) - 1})")
+
+    if all_monitors:
+        return ImageGrab.grab(all_screens=True)
+
+    if region is not None:
+        sw, sh = get_screen_size()
+        left, top, right, bottom = region
+        # If strictly within primary screen, fast grab
+        if left >= 0 and top >= 0 and right <= sw and bottom <= sh:
+            try:
+                return ImageGrab.grab(bbox=region)
+            except Exception:
+                pass
+        # Fallback/multi-monitor: grab full virtual desktop and crop
+        full = ImageGrab.grab(all_screens=True)
+        vx, vy, _, _ = get_virtual_screen_bounds()
+        crop_box = (left - vx, top - vy, right - vx, bottom - vy)
+        return full.crop(crop_box)
+
+    return ImageGrab.grab()
+
 
 
 def capture_window(
@@ -56,6 +91,7 @@ def capture_window(
 
     img = capture_screen(region=updated_rect)
     return img, win_info
+
 
 
 def save_capture(

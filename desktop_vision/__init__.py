@@ -1,44 +1,141 @@
 """
-Desktop Vision & OS Automation Package
+Desktop Vision & OS Automation Package (v0.3.0)
+Autonomous Desktop Perception, UI Automation, Native OCR, Multi-Monitor & OS Control Engine for AI Agents.
 """
 
-from .desktop import attach_desktop, get_screen_size, set_dpi_awareness
-from .window import WindowInfo, bring_to_front, find_window, find_windows, list_windows
+from .desktop import (
+    MonitorInfo,
+    attach_desktop,
+    get_active_desktop_name,
+    get_monitors,
+    get_screen_size,
+    get_virtual_screen_bounds,
+    is_secure_desktop_active,
+    is_uac_active,
+    set_dpi_awareness,
+)
+from .window import (
+    WindowInfo,
+    bring_to_front,
+    center_window,
+    close_window,
+    find_window,
+    find_windows,
+    list_windows,
+    maximize_window,
+    minimize_window,
+    move_window,
+    resize_window,
+)
 from .capture import capture_screen, capture_window, save_capture
 from .input import (
     click,
     click_window,
     double_click,
+    drag_and_drop,
+    drag_to,
     hotkey,
+    hover,
+    hover_window,
     move_to,
+    paste_text,
     press_key,
     right_click,
     scroll,
     type_text,
 )
+from .elements import (
+    UIElement,
+    click_element,
+    find_element,
+    find_elements,
+    inspect_elements,
+    set_element_text,
+)
+from .ocr import (
+    TextMatch,
+    click_text,
+    find_text,
+    get_available_languages,
+    recognize_text,
+)
+from .waiting import (
+    wait_for_change,
+    wait_for_element,
+    wait_for_text,
+    wait_for_window,
+    wait_until_idle,
+)
+from .lifecycle import (
+    is_process_running,
+    launch_app,
+    terminate_process,
+)
+from .tracing import (
+    ActionRecord,
+    ActionTracer,
+)
 from .agent import DesktopAgent
 
-__version__ = "0.1.0"
+__version__ = "0.3.0"
 __all__ = [
     "DesktopAgent",
+    "MonitorInfo",
     "attach_desktop",
     "get_screen_size",
+    "get_monitors",
+    "get_virtual_screen_bounds",
     "set_dpi_awareness",
+    "get_active_desktop_name",
+    "is_secure_desktop_active",
+    "is_uac_active",
     "WindowInfo",
     "list_windows",
     "find_window",
     "find_windows",
     "bring_to_front",
+    "move_window",
+    "resize_window",
+    "center_window",
+    "maximize_window",
+    "minimize_window",
+    "close_window",
     "capture_screen",
     "capture_window",
     "save_capture",
     "move_to",
+    "hover",
+    "hover_window",
     "click",
     "double_click",
     "right_click",
     "click_window",
+    "drag_to",
+    "drag_and_drop",
     "scroll",
     "type_text",
+    "paste_text",
     "press_key",
     "hotkey",
+    "UIElement",
+    "inspect_elements",
+    "find_element",
+    "find_elements",
+    "click_element",
+    "set_element_text",
+    "TextMatch",
+    "recognize_text",
+    "find_text",
+    "click_text",
+    "get_available_languages",
+    "wait_for_window",
+    "wait_for_text",
+    "wait_for_element",
+    "wait_for_change",
+    "wait_until_idle",
+    "launch_app",
+    "terminate_process",
+    "is_process_running",
+    "ActionTracer",
+    "ActionRecord",
 ]
