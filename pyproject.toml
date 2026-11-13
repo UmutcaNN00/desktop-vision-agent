@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "desktop-vision-agent"
+version = "0.1.0"
+description = "Autonomous Desktop Perception and OS Automation Engine for AI Agents"
+authors = [{ name = "Umut & Antigravity" }]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "pillow>=10.0.0",
+    "pyautogui>=0.9.54",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: Microsoft :: Windows",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: User Interfaces",
+]
+
+[project.scripts]
+desktop-vision = "desktop_vision.cli:main"
